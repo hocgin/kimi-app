@@ -3,9 +3,8 @@ name: Deploy::App
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-  pull_request:
+    tags:
+      - 'v*'
 
 jobs:
   deploy:
@@ -16,6 +15,9 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v3
+
+      - id: prep
+        uses: hocgin/action-env@main
 
       - name: Setup Node
         uses: actions/setup-node@v3
