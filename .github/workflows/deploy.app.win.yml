@@ -28,6 +28,12 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Rename Version
+        run: |
+          sed -i "s/\"1.0.0\"/\"${VERSION}\"/" package.json
+        env:
+          VERSION: ${{ steps.prep.outputs.version_number }}
+
       - run: npm install
       - run: npm run package
 
