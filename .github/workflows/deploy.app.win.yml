@@ -30,7 +30,7 @@ jobs:
 
       - name: Rename Version
         run: |
-          sed -i "s/\"1.0.0\"/\"${VERSION}\"/" package.json
+          (Get-Content package.json) -replace "1.0.0", $VERSION | Set-Content package.json
         env:
           VERSION: ${{ steps.prep.outputs.version_number }}
 
