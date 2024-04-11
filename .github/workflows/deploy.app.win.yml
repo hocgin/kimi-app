@@ -30,10 +30,9 @@ jobs:
 
       - name: Rename Version
         run: |
-          (Get-Content package.json) -replace "(?<=^|(?<=\W))9.9.9(?!\w)", "$VERSION" | Set-Content package.json
+          echo "${{ steps.prep.outputs.version_number }}"
+          (Get-Content package.json) -replace "(?<=^|(?<=\W))9.9.9(?!\w)", "${{ steps.prep.outputs.version_number }}" | Set-Content package.json
           get-content  package.json -encoding utf8
-        env:
-          $VERSION: ${{ steps.prep.outputs.version_number }}
 
       - run: npm install
       - run: npm run package
