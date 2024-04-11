@@ -31,6 +31,7 @@ jobs:
       - name: Rename Version
         run: |
           (Get-Content package.json) -replace "1.0.0", $VERSION | Set-Content package.json
+          get-content  package.json -encoding utf8
         env:
           VERSION: ${{ steps.prep.outputs.version_number }}
 
