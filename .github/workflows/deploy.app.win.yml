@@ -33,7 +33,7 @@ jobs:
           (Get-Content package.json) -replace "1.0.0", $VERSION | Set-Content package.json
           get-content  package.json -encoding utf8
         env:
-          VERSION: ${{ steps.prep.outputs.version_number }}
+          $VERSION: ${{ steps.prep.outputs.version_number }}
 
       - run: npm install
       - run: npm run package
