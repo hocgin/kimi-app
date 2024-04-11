@@ -30,7 +30,7 @@ jobs:
 
       - name: Rename Version
         run: |
-          (Get-Content package.json) -replace "(?<=^|(?<=\W))1.0.0(?!\w)", "$VERSION" | Set-Content package.json
+          (Get-Content package.json) -replace "(?<=^|(?<=\W))9.9.9(?!\w)", "$VERSION" | Set-Content package.json
           get-content  package.json -encoding utf8
         env:
           $VERSION: ${{ steps.prep.outputs.version_number }}

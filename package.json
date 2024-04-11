@@ -1,7 +1,7 @@
 {
   "name": "kimi-app",
   "productName": "kimi-app",
-  "version": "1.0.0",
+  "version": "9.9.9",
   "description": "Menubar app for Kimi",
   "main": "index.js",
   "scripts": {
