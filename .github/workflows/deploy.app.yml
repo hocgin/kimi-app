@@ -25,7 +25,7 @@ jobs:
           node-version: '18'
 
       - run: npm install
-      - run: electron-forge package --arch arm64,x64
+      - run: npm run package
       - run: zip -r -FS Kimi-darwin-arm64.zip out/Kimi-darwin-arm64/*
       - run: zip -r -FS Kimi-darwin-x64.zip out/Kimi-darwin-x64/*
 
