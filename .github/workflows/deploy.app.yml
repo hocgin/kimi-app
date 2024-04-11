@@ -1,0 +1,52 @@
+name: Deploy::App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - uses: electron-forge package --arch arm64,x64
+      - uses: zip -r -FS Kimi-darwin-arm64.zip out/Kimi-darwin-arm64/*
+      - uses: zip -r -FS Kimi-darwin-x64.zip out/Kimi-darwin-x64/*
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+
+      - name: Upload Release darwin-arm64.zip Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./out/Kimi-darwin-arm64.zip
+          asset_name: Kimi-darwin-arm64.zip
+          asset_content_type: application/zip
+
+      - name: Upload Release darwin-x64.zip Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./out/Kimi-darwin-x64.zip
+          asset_name: Kimi-darwin-x64.zip
+          asset_content_type: application/zip
