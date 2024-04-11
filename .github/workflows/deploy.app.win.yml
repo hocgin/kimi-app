@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-11 ]
+        os: [ windows-latest ]
     permissions:
       contents: write
     concurrency:
@@ -32,11 +32,11 @@ jobs:
       - run: npm run package
 
       - run: |
-          zip -r Kimi-$OS-arm64.zip out/Kimi-*-arm64
+          7z a -tzip Kimi-win32-arm64.zip  out/Kimi-win32-arm64
         env:
           OS: ${{ matrix.os }}
       - run: |
-          zip -r Kimi-$OS-x64.zip   out/Kimi-*-x64
+          7z a -tzip Kimi-win32-x64.zip  out/Kimi-win32-x64
         env:
           OS: ${{ matrix.os }}
 
