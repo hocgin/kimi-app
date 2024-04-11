@@ -30,12 +30,18 @@ jobs:
 
       - run: npm install
       - run: npm run package
-      - run: |
-          zip -r Kimi-$OS-arm64.zip out/Kimi-*-arm64
+
+      - name: zip arm64
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -r Kimi-$OS-arm64.zip out/Kimi-*-arm64
         env:
           OS: ${{ matrix.os }}
-      - run: |
-          zip -r Kimi-$OS-x64.zip   out/Kimi-*-x64
+
+      - name: zip x64
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -r Kimi-$OS-x64.zip   out/Kimi-*-x64
         env:
           OS: ${{ matrix.os }}
 
