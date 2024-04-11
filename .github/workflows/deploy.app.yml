@@ -30,8 +30,14 @@ jobs:
 
       - run: npm install
       - run: npm run package
-      - run: zip -r Kimi-darwin-arm64.zip out/Kimi-darwin-arm64
-      - run: zip -r Kimi-darwin-x64.zip   out/Kimi-darwin-x64
+      - run: |
+          zip -r Kimi-$OS-arm64.zip out/Kimi-*-arm64
+        env:
+          OS: ${{ matrix.os }}
+      - run: |
+          zip -r Kimi-$OS-x64.zip   out/Kimi-*-x64
+        env:
+          OS: ${{ matrix.os }}
 
       - name: Create Release
         id: create_release
@@ -44,8 +50,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Kimi-darwin-arm64.zip
-          asset_name: ${{ matrix.os }}-Kimi-darwin-arm64.zip
+          asset_path: Kimi-${{ matrix.os }}-arm64.zip
+          asset_name: Kimi-${{ matrix.os }}-arm64.zip
           asset_content_type: application/zip
 
       - name: Upload Release darwin-x64.zip Asset
@@ -54,6 +60,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Kimi-darwin-x64.zip
-          asset_name: ${{ matrix.os }}-Kimi-darwin-x64.zip
+          asset_path: Kimi-${{ matrix.os }}-x64.zip
+          asset_name: Kimi-${{ matrix.os }}-x64.zip
           asset_content_type: application/zip
