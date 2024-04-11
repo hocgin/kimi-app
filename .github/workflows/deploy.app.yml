@@ -29,8 +29,16 @@ jobs:
           node-version: '18'
 
       - name: Rename Version
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sed -i "s/\"1.0.0\"/\"${VERSION}\"/" package.json
+        env:
+          VERSION: ${{ steps.prep.outputs.version_number }}
+
+      - name: Rename Version
+        if: matrix.os == 'macos-11'
+        run: |
+          sed -i '' "s/\"1.0.0\"/\"${VERSION}\"/" package.json
         env:
           VERSION: ${{ steps.prep.outputs.version_number }}
 
