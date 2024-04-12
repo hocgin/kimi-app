@@ -1,12 +1,15 @@
 // todo https://github.com/electron/electron/issues/7476
 // require("update-electron-app")();
+const fs = require("fs");
+const path = require("path");
 
+const data = fs.readFileSync(__dirname + '/package.json', 'utf8');
+let pkg = JSON.parse(data);
 const {menubar} = require("menubar");
 const Analytics = require('electron-google-analytics4').default;
 const analytics = new Analytics('G-5WHLLLW38Y', 'LDGJbEmcR1-1naJDfemQFQ');
 analytics.setParams({"engagement_time_msec": 1});
 
-const path = require("path");
 const {
   app, nativeImage, Tray, Menu, globalShortcut, shell,
 } = require("electron");
@@ -42,30 +45,38 @@ app.on("ready", () => {
       app.dock.hide();
     }
 
-    const contextMenuTemplate = [// add links to github repo and vince's twitter
-      {
-        label: "Quit", accelerator: "Command+Q", click: () => {
-          app.quit();
-        },
-      }, {
-        label: "Reload", accelerator: "Command+R", click: () => {
-          window.reload();
-        },
-      }, {
-        label: "Open in browser", click: () => {
-          shell.openExternal("https://kimi.moonshot.cn/");
-        },
-      }, {
-        type: "separator",
-      }, {
-        label: "View on GitHub", click: () => {
-          shell.openExternal("https://github.com/hocgin/kimi-app");
-        },
-      }, {
-        label: "Author on Twitter", click: () => {
-          shell.openExternal("https://twitter.com/hocgin");
-        },
-      },];
+    const contextMenuTemplate = [{
+      label: 'Always On Top', type: 'checkbox', checked: false,
+      click: (menuItem, browserWindow, event) => {
+        let newChecked = menuItem.checked;
+        contextMenuTemplate[0].checked = newChecked;
+        let mainWindow = mb.window;
+        mainWindow.setAlwaysOnTop(newChecked);
+        mb.tray.closeContextMenu();
+      }
+    }, {
+      label: "Quit", accelerator: "Command+Q", click: () => {
+        app.quit();
+      },
+    }, {
+      label: "Reload", accelerator: "Command+R", click: () => {
+        window.reload();
+      },
+    }, {
+      label: "Open in Browser", click: () => {
+        shell.openExternal("https://kimi.moonshot.cn/");
+      },
+    }, {
+      type: "separator",
+    }, {
+      label: "Home Page", click: () => {
+        shell.openExternal(`https://logspot.hocgin.top/${pkg.name}`);
+      },
+    }, {
+      label: "More", click: () => {
+        shell.openExternal("https://logspot.hocgin.top/");
+      },
+    },];
 
     tray.on("right-click", () => {
       mb.tray.popUpContextMenu(Menu.buildFromTemplate(contextMenuTemplate));
